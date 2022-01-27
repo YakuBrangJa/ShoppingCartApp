@@ -237,6 +237,21 @@ body {
 .bag-btn.in-cart {
   transform: translateX(0);
 }
+.bag-btn .amount {
+  color: var(--mainWhite);
+
+  margin-left: 8px;
+}
+/* .amount {
+  display: inline-block;
+  background: white;
+  color: var(--primaryColor);
+  border-radius: 50%;
+  padding: 2px 5px;
+  font-weight: bold;
+  font-family: "Lato", sans-serif;
+  font-size: 1rem;
+} */
 .bag-btn:hover {
   color: var(--mainWhite);
 }

@@ -47,7 +47,7 @@ class UI {
           alt="product"
           class="product-img"
         />
-        <button class="bag-btn" data-id="${product.id}" data-status="add">
+        <button class="bag-btn" data-id="${product.id}" data-status="function1">
           <i class="fas fa-shopping-cart"></i>
           add to bag
         </button>
@@ -63,17 +63,21 @@ class UI {
   getBagButtons() {
     productsDOM.addEventListener("click", (e) => {
       let item = e.target.closest(".bag-btn");
-      if (!item) return;
+      if (!item || item.dataset.status === "function2") return;
 
       let id = item.dataset.id;
 
       // getting an item that match with clicked id
-      let cartItem = { ...Storage.getProducts(id), amount: 1 };
+      let cartItem = {
+        ...Storage.getProducts(id),
+        amount: 1,
+        // status: "function2",
+      };
 
-      item.innerText = `in cart ${cartItem.amount}`;
-      item.disabled = true;
+      item.innerHTML = `in cart <span class="amount">${cartItem.amount}</span>`;
+      // item.disabled = true;
       item.classList.add("in-cart");
-
+      item.dataset.status = "function2";
       // add prodct to the cart
       // cart = [...cart, cartItem];
       cart.push(cartItem);
@@ -91,6 +95,20 @@ class UI {
       // this.showCart();
     });
   }
+
+  // productHover() {
+  //   productsDOM.addEventListener("mouseover", (e) => {
+  //     let item = e.target.closest(".bag-btn");
+  //     if (!item || item.dataset.status === "function1") return;
+  //     item.innerText = `See in cart`;
+  //   });
+  //   productsDOM.addEventListener("mouseleave", (e) => {
+  //     let item = e.target.closest(".bag-btn");
+  //     if (!item || item.dataset.status === "function1") return;
+  //     item.innerText = `in cart`;
+  //   });
+  // }
+
   setCartValues(cart) {
     let tempTotal = 0;
     let itemsTotal = 0;
@@ -129,9 +147,12 @@ class UI {
 
     cart.forEach((item) => {
       this.addCartItem(item);
-      this.getButtons(item).innerText = `in cart ${item.amount}`;
-      this.getButtons(item).disabled = true;
+      this.getButtons(
+        item
+      ).innerHTML = `in cart <span class="amount">${item.amount}</span>`;
+      // this.getButtons(item).disabled = true;
       this.getButtons(item).classList.add("in-cart");
+      this.getButtons(item).dataset.status = "function2";
     });
   }
 
@@ -164,8 +185,9 @@ class UI {
       this.getButtons(
         item
       ).innerHTML = `<i class="fas fa-shopping-cart"></i>add to cart`;
-      this.getButtons(item).disabled = false;
+      // this.getButtons(item).disabled = false;
       this.getButtons(item).classList.remove("in-cart");
+      this.getButtons(item).dataset.status = "function1";
     });
   }
 
@@ -194,8 +216,9 @@ class UI {
     this.getButtons(
       item
     ).innerHTML = `<i class="fas fa-shopping-cart"></i>add to cart`;
-    this.getButtons(item).disabled = false;
+    // this.getButtons(item).disabled = false;
     this.getButtons(item).classList.remove("in-cart");
+    this.getButtons(item).dataset.status = "function1";
   }
 
   increaseAmount(e) {
@@ -212,7 +235,9 @@ class UI {
     increaseBtn.parentNode.querySelector(".item-amount").innerText =
       tempItem.amount;
 
-    this.getButtons(tempItem).innerHTML = `in cart ${tempItem.amount}`;
+    this.getButtons(
+      tempItem
+    ).innerHTML = `in cart <span class="amount">${tempItem.amount}</span>`;
   }
 
   decreaseAmount(e) {
@@ -230,7 +255,9 @@ class UI {
     decreaseBtn.parentNode.querySelector(".item-amount").innerText =
       tempItem.amount;
 
-    this.getButtons(tempItem).innerHTML = `in cart ${tempItem.amount}`;
+    this.getButtons(
+      tempItem
+    ).innerHTML = `in cart <span class="amount">${tempItem.amount}</span>`;
   }
 }
 
@@ -275,12 +302,14 @@ class Cart {
       if (e.target.closest(".cart") || e.target.closest(".remove-item")) return;
       this.closeCart();
     };
-    // productsDOM.addEventListener("click", (e) => {
-    //   let item = e.target.closest(".bag-btn");
-    //   if (!item) return;
+    productsDOM.addEventListener("click", (e) => {
+      let item = e.target.closest(".bag-btn");
+      if (!item || item.dataset.status === "function1") return;
 
-    //   this.openCart();
-    // });
+      // item.dataset.status = "function1";
+
+      this.openCart();
+    });
   }
   openCart() {
     cartDOM.classList.add("showCart");
@@ -309,6 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(() => {
       ui.getBagButtons();
+      // ui.productHover();
       ui.cartManage();
     });
 });
