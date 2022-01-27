@@ -47,7 +47,7 @@ class UI {
           alt="product"
           class="product-img"
         />
-        <button class="bag-btn" data-id="${product.id}">
+        <button class="bag-btn" data-id="${product.id}" data-status="add">
           <i class="fas fa-shopping-cart"></i>
           add to bag
         </button>
@@ -65,16 +65,14 @@ class UI {
       let item = e.target.closest(".bag-btn");
       if (!item) return;
 
-      item.innerText = "In Cart";
-      item.disabled = true;
-
       let id = item.dataset.id;
-      buttonDOM.push(id);
-      console.log(...buttonDOM);
 
       // getting an item that match with clicked id
       let cartItem = { ...Storage.getProducts(id), amount: 1 };
-      console.log(cartItem);
+
+      item.innerText = `in cart ${cartItem.amount}`;
+      item.disabled = true;
+      item.classList.add("in-cart");
 
       // add prodct to the cart
       // cart = [...cart, cartItem];
@@ -131,8 +129,9 @@ class UI {
 
     cart.forEach((item) => {
       this.addCartItem(item);
-      this.getButtons(item).innerText = "In Cart";
+      this.getButtons(item).innerText = `in cart ${item.amount}`;
       this.getButtons(item).disabled = true;
+      this.getButtons(item).classList.add("in-cart");
     });
   }
 
@@ -166,6 +165,7 @@ class UI {
         item
       ).innerHTML = `<i class="fas fa-shopping-cart"></i>add to cart`;
       this.getButtons(item).disabled = false;
+      this.getButtons(item).classList.remove("in-cart");
     });
   }
 
@@ -195,6 +195,7 @@ class UI {
       item
     ).innerHTML = `<i class="fas fa-shopping-cart"></i>add to cart`;
     this.getButtons(item).disabled = false;
+    this.getButtons(item).classList.remove("in-cart");
   }
 
   increaseAmount(e) {
@@ -210,6 +211,8 @@ class UI {
 
     increaseBtn.parentNode.querySelector(".item-amount").innerText =
       tempItem.amount;
+
+    this.getButtons(tempItem).innerHTML = `in cart ${tempItem.amount}`;
   }
 
   decreaseAmount(e) {
@@ -226,6 +229,8 @@ class UI {
 
     decreaseBtn.parentNode.querySelector(".item-amount").innerText =
       tempItem.amount;
+
+    this.getButtons(tempItem).innerHTML = `in cart ${tempItem.amount}`;
   }
 }
 
@@ -270,6 +275,12 @@ class Cart {
       if (e.target.closest(".cart") || e.target.closest(".remove-item")) return;
       this.closeCart();
     };
+    // productsDOM.addEventListener("click", (e) => {
+    //   let item = e.target.closest(".bag-btn");
+    //   if (!item) return;
+
+    //   this.openCart();
+    // });
   }
   openCart() {
     cartDOM.classList.add("showCart");

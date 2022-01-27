@@ -219,6 +219,7 @@ body {
   overflow: hidden;
 }
 .bag-btn {
+  color: #111;
   position: absolute;
   top: 70%;
   right: 0;
@@ -231,6 +232,10 @@ body {
   transition: var(--mainTransition);
   transform: translateX(101%);
   cursor: pointer;
+}
+
+.bag-btn.in-cart {
+  transform: translateX(0);
 }
 .bag-btn:hover {
   color: var(--mainWhite);
