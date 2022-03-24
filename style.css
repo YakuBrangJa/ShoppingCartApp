@@ -169,11 +169,11 @@ body {
   text-align: center;
 }
 .remove-item {
-  color: grey;
+  color: var(--primaryColor);
   cursor: pointer;
 }
 .remove-item:hover {
-  color: var(--primaryColor);
+  color: grey;
 }
 .fa-chevron-up,
 .fa-chevron-down {
